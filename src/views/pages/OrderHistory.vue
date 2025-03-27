@@ -553,11 +553,23 @@ onMounted(fetchOrderHistory);
                             </div>
                         </div>
                     </div>
-                    <div v-if="order.remark_5 != ''" class="flex justify-between items-center p-4 border-b border-gray-100 dark:border-gray-700">
-                        <div v-if="order.remark_5" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            <a :href="order.remark_5" target="_blank" class="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                                {{ order.remark_5 }}
-                            </a>
+                    <!-- ส่วนหัวข้อ -->
+                    <div v-if="order.remark_5 != ''" class="mr-4 ml-4 mt-4">
+                        <!-- ส่วนหัวข้อ -->
+                        <div class="flex items-center mb-2">
+                            <h3 class="font-medium flex items-center">
+                                <i class="pi pi-truck mr-2 text-primary-500"></i>
+                                สถานะการจัดส่ง
+                            </h3>
+                        </div>
+
+                        <!-- ส่วนลิงก์ติดตามพัสดุ -->
+                        <div class="mt-2">
+                            <div v-if="order.remark_5" class="text-sm">
+                                <a :href="order.remark_5" target="_blank" class="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                    <span class="truncate mr-1">{{ order.remark_5 }}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 

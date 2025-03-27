@@ -3,7 +3,6 @@ import { useLayout } from '@/layout/composables/layout';
 import { computed, ref, watch } from 'vue';
 
 // นำเข้าคอมโพเนนต์ส่วนประกอบของเลย์เอาท์
-import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
 
@@ -93,7 +92,7 @@ function isOutsideClicked(event) {
             </div>
 
             <!-- ส่วนท้ายของแอป -->
-            <app-footer></app-footer>
+            <!-- <app-footer></app-footer> -->
         </div>
 
         <!-- เงาสำหรับเอฟเฟกต์การเปิดเมนู -->
