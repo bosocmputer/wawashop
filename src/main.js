@@ -86,7 +86,6 @@ app.component('IconField', IconField);
 app.component('ConfirmDialog', ConfirmDialog);
 app.component('Tag', Tag);
 app.component('Dialog', Dialog);
-app.directive('Tooltip', Tooltip);
 app.component('Card', Card);
 app.component('RadioButton', RadioButton);
 app.component('Dropdown', Dropdown);
@@ -97,7 +96,6 @@ app.component('Galleria', Galleria);
 app.component('TabPanel', TabPanel);
 app.component('TabView', TabView);
 app.component('Divider', Divider);
-app.component('Tooltip', Tooltip);
 app.component('DataView', DataView);
 app.component('Carousel', Carousel);
 app.component('MultiSelect', MultiSelect);
@@ -112,5 +110,6 @@ app.component('Steps', Steps);
 
 // Register directives
 app.directive('styleclass', StyleClass);
+app.directive('Tooltip', Tooltip);
 
 app.mount('#app');
