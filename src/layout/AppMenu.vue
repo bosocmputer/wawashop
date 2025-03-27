@@ -9,6 +9,7 @@ const router = useRouter();
 
 // คำนวณจำนวนสินค้าในตะกร้า
 const cartItemCount = computed(() => cartStore.totalItems);
+const isLoggedIn = ref(!!localStorage.getItem('_token'));
 
 // ฟังก์ชันสำหรับออกจากระบบ
 const handleLogout = () => {
@@ -16,10 +17,11 @@ const handleLogout = () => {
     localStorage.removeItem('_token');
     // Clear any other user data
     localStorage.clear();
+    // อัพเดตสถานะการล็อกอิน
+    isLoggedIn.value = false;
     // Redirect to login page
     router.push('/auth/login');
 };
-
 const model = ref([
     {
         label: 'ร้านค้า',
@@ -34,20 +36,25 @@ const model = ref([
             }
         ]
     },
+    // เมนูประวัติต่างๆ จะแสดงเฉพาะเมื่อล็อกอินแล้ว
+    ...(isLoggedIn.value
+        ? [
+              {
+                  label: 'ประวัติ',
+                  items: [
+                      { label: 'ประวัติการสั่งซื้อ', icon: 'pi pi-fw pi-history', to: '/orders-history' },
+                      { label: 'ประวัติเอกสาร', icon: 'pi pi-fw pi-history', to: '/doc-history' }
+                  ]
+              }
+          ]
+        : []),
     {
-        label: 'ประวัติ',
-        items: [
-            { label: 'ประวัติการสั่งซื้อ', icon: 'pi pi-fw pi-history', to: '/orders-history' },
-            { label: 'ประวัติเอกสาร', icon: 'pi pi-fw pi-history', to: '/doc-history' }
-        ]
-    },
-    {
-        label: 'ออกจากระบบ',
+        label: isLoggedIn.value ? 'ออกจากระบบ' : 'เข้าสู่ระบบ',
         items: [
             {
-                label: 'ออกจากระบบ',
-                icon: 'pi pi-sign-out',
-                command: () => handleLogout()
+                label: isLoggedIn.value ? 'ออกจากระบบ' : 'เข้าสู่ระบบ',
+                icon: isLoggedIn.value ? 'pi pi-sign-out' : 'pi pi-sign-in',
+                command: () => (isLoggedIn.value ? handleLogout() : router.push('/auth/login'))
             }
         ]
     }

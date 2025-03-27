@@ -1,5 +1,6 @@
 <script setup>
 import ProductService from '@/services/ProductService';
+import { useAuthenStore } from '@/stores/authen';
 import { useCartStore } from '@/stores/cartStore';
 import Badge from 'primevue/badge';
 import Button from 'primevue/button';
@@ -22,6 +23,9 @@ const loading = ref(true);
 const toast = useToast();
 const cartStore = useCartStore();
 const selectedUnitIndex = ref(0);
+
+const authenStore = useAuthenStore();
+const isLoggedIn = computed(() => authenStore.isAuthenticated);
 
 // สไลด์กาลเลอรี่ responsive options
 const galleryOptions = ref([
@@ -68,6 +72,10 @@ const currentUnit = computed(() => {
         return product.value.otherUnits[selectedUnitIndex.value - 1];
     }
 });
+
+function goToLogin() {
+    router.push('/auth/login');
+}
 
 // ฟังก์ชันสำหรับจัดรูปแบบตัวเลข
 function formatNumber(value) {
@@ -342,19 +350,18 @@ function toggleFavorite() {
                             <div v-if="product.otherUnits && product.otherUnits.length > 0" class="mb-4">
                                 <div class="text-base sm:text-lg font-medium mb-3">เลือกหน่วย:</div>
                                 <div class="flex flex-wrap gap-2">
-                                    <Button
-                                        v-for="(_, index) in [product, ...product.otherUnits]"
-                                        :key="index"
-                                        :label="index === 0 ? product.unit_code : product.otherUnits[index - 1].unit_code"
-                                        :outlined="selectedUnitIndex !== index"
-                                        :disabled="index === 0 ? product.sold_out === '1' : product.otherUnits[index - 1].sold_out === '1'"
-                                        @click="changeUnit(index)"
-                                        class="text-base"
-                                        size="small"
-                                    />
+                                    <!-- ปุ่มเลือกหน่วยหลัก -->
+                                    <Button :label="product.unit_code" :outlined="selectedUnitIndex !== 0" @click="changeUnit(0)" class="text-base" size="small" />
+
+                                    <!-- ปุ่มเลือกหน่วยอื่นๆ -->
+                                    <Button v-for="(unitItem, idx) in product.otherUnits" :key="idx" :label="unitItem.unit_code" :outlined="selectedUnitIndex !== idx + 1" @click="changeUnit(idx + 1)" class="text-base" size="small" />
                                 </div>
                             </div>
 
+                            <div v-if="currentUnit && currentUnit.sold_out === '1'" class="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300 p-3 rounded-lg text-base sm:text-lg mb-4 flex items-center">
+                                <i class="pi pi-exclamation-triangle mr-2"></i>
+                                <span>สินค้าหน่วยนี้หมด ไม่สามารถสั่งซื้อได้</span>
+                            </div>
                             <!-- Price section -->
                             <div class="flex items-center mb-4 mt-5" v-if="currentUnit">
                                 <span class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary"> ฿{{ parseFloat(currentUnit.price).toLocaleString() }} </span>
@@ -403,7 +410,11 @@ function toggleFavorite() {
 
                             <!-- Add to Cart Button -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <Button icon="pi pi-shopping-cart" label="เพิ่มลงตะกร้า" @click="addToCart" :disabled="currentUnit && currentUnit.sold_out === '1'" class="w-full p-button-lg flex items-center justify-center" />
+                                <!-- กรณีเข้าสู่ระบบแล้ว แสดงปุ่มเพิ่มลงตะกร้า -->
+                                <Button v-if="isLoggedIn" icon="pi pi-shopping-cart" label="เพิ่มลงตะกร้า" @click="addToCart" :disabled="currentUnit && currentUnit.sold_out === '1'" class="w-full p-button-lg flex items-center justify-center" />
+
+                                <!-- กรณียังไม่ได้เข้าสู่ระบบ แสดงปุ่มเข้าสู่ระบบ -->
+                                <Button v-else icon="pi pi-sign-in" label="เข้าสู่ระบบเพื่อสั่งซื้อ" @click="goToLogin" class="w-full p-button-lg p-button-outlined flex items-center justify-center" />
                             </div>
                         </template>
                     </Card>

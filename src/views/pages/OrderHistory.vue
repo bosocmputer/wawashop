@@ -545,15 +545,19 @@ onMounted(fetchOrderHistory);
                             <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 {{ formatDate(order.doc_date, order.doc_time) }}
                             </div>
-                            <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                {{ order.remark }}
-                            </div>
                         </div>
                         <div class="text-right">
                             <div class="text-lg font-bold">฿{{ formatCurrency(order.total_amount) }}</div>
                             <div class="text-sm text-gray-500 dark:text-gray-400">
                                 {{ order.send_type === '1' ? 'จัดส่ง' : 'รับที่ร้าน' }}
                             </div>
+                        </div>
+                    </div>
+                    <div v-if="order.remark_5 != ''" class="flex justify-between items-center p-4 border-b border-gray-100 dark:border-gray-700">
+                        <div v-if="order.remark_5" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            <a :href="order.remark_5" target="_blank" class="flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+                                {{ order.remark_5 }}
+                            </a>
                         </div>
                     </div>
 

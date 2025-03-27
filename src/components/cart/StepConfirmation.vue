@@ -5,6 +5,7 @@ import CustomerService from '@/services/CustomerService';
 import EmployeeService from '@/services/EmployeeService';
 import ProductService from '@/services/ProductService';
 import { onMounted, ref } from 'vue';
+// Note: defineProps and defineEmits are compiler macros and don't need to be imported
 
 const props = defineProps({
     cartItems: {
